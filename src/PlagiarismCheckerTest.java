@@ -27,7 +27,7 @@ public class PlagiarismCheckerTest {
         setTestData(2);
     }
 
-    @Test
+    @org.testng.annotations.Test
     @Timeout(value = 250, unit = TimeUnit.MILLISECONDS)
     public void testEfficientLargest() {
         setTestData(3);

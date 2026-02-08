@@ -17,7 +17,17 @@ public class PlagiarismChecker {
     public static int longestSharedSubstring(String doc1, String doc2) {
 
         // TODO Complete this function to return the length of the longest shared substring.
-
-        return 0;
+        int n1 = doc1.length();
+        int n2 = doc2.length();
+        int[][] array = new int[n1 + 1][n2 + 1];
+        return recursiveFunc(array, (int) (0.5 * n1), (int) (0.5*n2));
+        // Fill with 0s at index 0 for each
+    }
+    public static int recursiveFunc(int[][] array, int index, int index2)
+    {
+        if(index == 0 || index2 == 0)
+        {
+            return 0;
+        }
     }
 }
