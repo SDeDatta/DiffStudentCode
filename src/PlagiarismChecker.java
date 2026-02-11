@@ -14,44 +14,50 @@ public class PlagiarismChecker {
      * @param doc2 the second
      * @return The length of the longest shared substring.
      */
-    public static int longestSharedSubstring(String doc1, String doc2) {
-
-        // TODO Complete this function to return the length of the longest shared substring.
+    public static int longestSharedSubstring(String doc1, String doc2)
+    {
+        // Creates a dynamic programming table where memory[i][j] returns the number of identical characters up to index i in
+        // doc1 and up to index j in doc2 between the two strings
+        // The table has (n + 1) rows and columns because we need to represent where a string of length 0 is an option.
         int n1 = doc1.length();
         int n2 = doc2.length();
-        int[][] array = new int[n1 + 1][n2 + 1];
-        for (int i = 0; i < array.length; i++)
-        {
-            for (int j = 0; j < array[0].length; j++)
-            {
-                array[i][j] = -1;
-            }
+        int[][] memory = new int[n1 + 1][n2 + 1];
 
-        }
-        return recursiveFunc(array, n1 - 1, n2 - 1, doc1, doc2) + 1;
-        // Fill with 0s at index 0 for each
+        return (int) (tabulateFunc(memory, n1 , n2 , doc1, doc2));
     }
-    public static int recursiveFunc(int[][] array, int index, int index2, String doc1, String doc2)
+    public static long tabulateFunc(int[][] memory, int index, int index2, String doc1, String doc2)
     {
-        int result;
-        if(array[index][index2] != -1)
+        // There is exactly 0 identical characters between two strings where at least one is of length 0
+        for(int i = 0; i < memory.length; i++)
         {
-            return array[index][index2];
+            memory[i][0] = 0;
         }
-        if(index == 0 || index2 == 0)
+        for(int j = 0; j < memory[0].length; j++)
         {
-            return 0;
+            memory[0][j] = 0;
         }
-        if(doc1.charAt(index) == doc2.charAt(index2))
+        int result = 0;
+        // i represents the current index in doc1
+        // j represents the current index in doc 2
+        for (int i = 1; i < memory.length; i++)
         {
-            // change to -
-            result = 1 + recursiveFunc(array, index - 1, index2 - 1, doc1, doc2);
+            for(int j = 1; j < memory[0].length; j++)
+            {
+                // Goes - 1 since the for loops start at 1
+                if(doc1.charAt(i - 1) == doc2.charAt(j - 1))
+                {
+                    // If the current characters match, add one to the previous LCS
+                    result = 1 + memory[i - 1][j - 1];
+                }
+                else
+                {
+                    // If the characters don't match, take the maximum of the strings previous to the current and make that the length
+                    result = Math.max(memory[i - 1][j], memory[i][j - 1]);
+                }
+                memory[i][j] = result;
+            }
         }
-        else
-        {
-            result = Math.max(recursiveFunc(array, index - 1, index2, doc1, doc2), recursiveFunc(array, index, index2 - 1, doc1, doc2));
-        }
-        array[index][index2] = result;
-        return result;
+        return memory[index][index2];
     }
+
 }
